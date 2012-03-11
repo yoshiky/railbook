@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/Fixtures.html
+
+one:
+  isbn: MyString
+  title: MyString
+  price: 1
+  publish: MyString
+  publisher: 2012-03-10
+  cd: false
+
+two:
+  isbn: MyString
+  title: MyString
+  price: 1
+  publish: MyString
+  publisher: 2012-03-10
+  cd: false
