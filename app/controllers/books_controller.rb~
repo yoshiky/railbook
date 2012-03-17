@@ -1,7 +1,5 @@
 #coding: utf-8
 
-require 'kconv'
-
 class BooksController < ApplicationController
   # GET /books
   # GET /books.json
@@ -47,7 +45,21 @@ class BooksController < ApplicationController
     @book = Book.new(params[:book])
 
     #アップロード処理
-    self.upload_pics
+    #file = params[:img_url]
+    name = @original_filename
+
+    perms = ['.jpg','.jpeg','.gif','.png','.bmp']
+    if !perms.include?(File.extname(name).downcase)
+      result = 'アップロードできるのは画像ファイルのみです。'
+
+    elsif file.size > 1.megabyte
+      result = 'ファイルサイズは1MBまでです。'
+    else
+      name = name.kconv(Kconv::SJIS, Kconv::UTF8)
+      File.open("public/imgs/#{name}", 'wb'){|f| f.write(file.read)}
+      result = "#{name.toutf8}をアップロードしました。"
+    end
+    render :text => result
 
     respond_to do |format|
       if @book.save
@@ -64,9 +76,6 @@ class BooksController < ApplicationController
   # PUT /books/1.json
   def update
     @book = Book.find(params[:id])
-
-    #アップロード処理
-    self.upload_pics
 
     respond_to do |format|
       if @book.update_attributes(params[:book])
@@ -100,11 +109,9 @@ class BooksController < ApplicationController
     end
   end
 
-  def upload_pics
-    #アップロード処理
-    file = @book.img_url
+  def update_pics
+    file = params[:upfile]
     name = file.original_filename
-    @book.img_url = "#{name}"
 
     perms = ['.jpg','.jpeg','.gif','.png','.bmp']
     if !perms.include?(File.extname(name).downcase)
@@ -114,8 +121,10 @@ class BooksController < ApplicationController
       result = 'ファイルサイズは1MBまでです。'
     else
       name = name.kconv(Kconv::SJIS, Kconv::UTF8)
-      File.open("app/assets/images/#{name}", 'wb'){|f| f.write(file.read)}
-      #result = "#{name.toutf8}をアップロードしました。"
+      File.open("public/imgs/#{name}", 'wb'){|f| f.write(file.read)}
+      result = "#{name.toutf8}をアップロードしました。"
     end
+
+    render :text => result
   end
 end

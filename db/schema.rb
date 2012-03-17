@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120311161438) do
+ActiveRecord::Schema.define(:version => 20120316155810) do
 
   create_table "books", :force => true do |t|
     t.string   "isbn"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(:version => 20120311161438) do
     t.boolean  "cd"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "img_url"
   end
 
   create_table "users", :force => true do |t|
