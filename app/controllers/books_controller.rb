@@ -3,10 +3,12 @@
 require 'kconv'
 
 class BooksController < ApplicationController
+  before_filter :authenticate_user!
   # GET /books
   # GET /books.json
   def index
-    @books = Book.all
+    #@books = Book.all
+    @books = Book.find(:all, :order => "isbn")
 
     respond_to do |format|
       format.html # index.html.erb

@@ -1,7 +1,18 @@
 Railbook::Application.routes.draw do
-  resources :users
+  root :to => 'welcome#index'
+  
+  devise_for :users
+  get 'books', :to => 'books#index', :as => :user_root
 
-  resources :books
+  #resources :books, :only => [ :index, :create ] do
+  resources :books do
+    put :finish, :on => :member
+    put :unfinish, :on => :member
+    get :done, :on => :collection
+  end
+
+  #resources :users
+  #resources :books
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
