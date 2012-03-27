@@ -12,7 +12,11 @@
       <td><%= book.publish %></td>
       <td><%= book.published %></td>
       <td><%= book.cd %></td>
-      <td><%= image_tag (book.img_url)%> </td>
+      <% if book.img_url == nil%>
+        <td><%= image_tag (book.img_url)%> </td>
+      <% else %>
+        <td><%= image_tag ("no-image.jpg")%></td>
+      <% end %>
     </tr>
   <% end %>
 </table>

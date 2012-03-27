@@ -10,22 +10,24 @@
     <th>Cd</th>
     <th>Image</th>
     <th></th>
-    <th></th>
-    <th></th>
   </tr>
 
 <% @books.each do |book| %>
-  <tr>
+  <tr style="background-color:<%= cycle('#FFffFF','#FFff99') %> ">
     <td><%= book.isbn %></td>
     <td><%= book.title %></td>
-    <td><%= book.price %></td>
+    <td><%= number_to_currency(book.price, :unit => '￥', :precision => 0) %></td>
     <td><%= book.publish %></td>
     <td><%= book.publisher %></td>
     <td><%= book.cd %></td>
-    <td><%= image_tag book.img_url %> </td>
-    <td><%= link_to 'Show', book %></td>
-    <td><%= link_to 'Edit', edit_book_path(book) %></td>
-    <td><%= link_to 'Destroy', book, confirm: 'Are you sure?', method: :delete %></td>
+    <% if book.img_url %>
+      <td><%= image_tag book.img_url %> </td>
+    <% elsif %>
+      <td><%= image_tag "no-image.jpg"%></td>
+    <% end %>
+    <td><%= link_to 'Show', book %><br/>
+        <%= link_to 'Edit', edit_book_path(book) %><br/>
+        <%= link_to 'Destroy', book, confirm: 'Are you sure?', method: :delete %></td>
   </tr>
 <% end %>
 </table>

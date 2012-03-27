@@ -36,6 +36,10 @@
     <%= f.check_box :cd %>
   </div>
   <div class="field">
+    <% if @book.img_url != nil%>
+      <%= image_tag (@book.img_url)%>
+    <% end %>
+
     <%= f.label :image %><br />
     <%= f.file_field :img_url %> 
   </div>

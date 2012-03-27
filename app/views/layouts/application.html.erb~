@@ -9,7 +9,19 @@
 <body>
 
   <div id="contents">
+    <% if user_signed_in? %>
+      <div align="right">
+        <p>ようこそ<%= current_user.email %>さん</p>
+        <%= link_to 'ログアウト', [ :destroy, :user_session ], :method => :delete  %>
+      </div>
+    <% else %>
+      <div align="right">
+        <%= link_to 'ログイン',  user_session_path %>
+      </div>
+    <% end %>
+  <!--
     <p class="notice"><%= notice %></p>
+  -->
     <p class="alert"><%= alert %></p>
     <%= yield %>
   </div>

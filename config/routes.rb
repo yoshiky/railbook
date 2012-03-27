@@ -1,5 +1,7 @@
 Railbook::Application.routes.draw do
-  root :to => 'welcome#index'
+  resources :reviews
+
+  root :to => 'books#index'
   
   devise_for :users
   get 'books', :to => 'books#index', :as => :user_root

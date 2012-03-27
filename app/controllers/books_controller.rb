@@ -3,7 +3,8 @@
 require 'kconv'
 
 class BooksController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, :only => ['new','edit','destroy']
+
   # GET /books
   # GET /books.json
   def index
@@ -20,6 +21,9 @@ class BooksController < ApplicationController
   # GET /books/1.json
   def show
     @book = Book.find(params[:id])
+
+    #レビュー投稿用にセッションにbook_idを保持
+    session[:book_id] = @book.id
 
     respond_to do |format|
       format.html # show.html.erb
@@ -104,20 +108,26 @@ class BooksController < ApplicationController
 
   def upload_pics
     #アップロード処理
-    file = @book.img_url
-    name = file.original_filename
-    @book.img_url = "#{name}"
+    if params[:book][:img_url]
+      #file = @book.img_url
+      file = params[:book][:img_url]
+      name = file.original_filename
+      #新規登録用
+      @book.img_url = "#{name}"
+      #更新用
+      params[:book][:img_url] = "#{name}"
 
-    perms = ['.jpg','.jpeg','.gif','.png','.bmp']
-    if !perms.include?(File.extname(name).downcase)
-      result = 'アップロードできるのは画像ファイルのみです。'
+      perms = ['.jpg','.jpeg','.gif','.png','.bmp']
+      if !perms.include?(File.extname(name).downcase)
+        result = 'アップロードできるのは画像ファイルのみです。'
 
-    elsif file.size > 1.megabyte
-      result = 'ファイルサイズは1MBまでです。'
-    else
-      name = name.kconv(Kconv::SJIS, Kconv::UTF8)
-      File.open("app/assets/images/#{name}", 'wb'){|f| f.write(file.read)}
-      #result = "#{name.toutf8}をアップロードしました。"
+      elsif file.size > 1.megabyte
+        result = 'ファイルサイズは1MBまでです。'
+      else
+        name = name.kconv(Kconv::SJIS, Kconv::UTF8)
+        File.open("app/assets/images/#{name}", 'wb'){|f| f.write(file.read)}
+        #result = "#{name.toutf8}をアップロードしました。"
+      end
     end
   end
 end
