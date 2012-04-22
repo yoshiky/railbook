@@ -21,6 +21,7 @@ class BooksController < ApplicationController
   # GET /books/1.json
   def show
     @book = Book.find(params[:id])
+    @review = Review.find_all_by_book_id(@book.id)
 
     #レビュー投稿用にセッションにbook_idを保持
     session[:book_id] = @book.id

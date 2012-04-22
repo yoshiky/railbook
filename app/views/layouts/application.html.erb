@@ -12,7 +12,7 @@
     <% if user_signed_in? %>
       <div align="right">
         <p>ようこそ<%= current_user.email %>さん</p>
-        <%= link_to 'ログアウト', destroy_user_session_path %>
+        <%= link_to 'ログアウト', destroy_user_session_path, :method => :delete %>
       </div>
     <% else %>
       <div align="right">
