@@ -9,6 +9,8 @@ gem 'mysql2'
 #gem 'rake', '0.8.7'
 gem 'devise'
 
+gem 'therubyracer'
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do

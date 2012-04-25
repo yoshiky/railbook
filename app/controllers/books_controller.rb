@@ -10,6 +10,7 @@ class BooksController < ApplicationController
   def index
     #@books = Book.all
     @books = Book.find(:all, :order => "isbn")
+    @book_images = []
 
     respond_to do |format|
       format.html # index.html.erb
@@ -22,6 +23,7 @@ class BooksController < ApplicationController
   def show
     @book = Book.find(params[:id])
     @review = Review.find_all_by_book_id(@book.id)
+    @book_image = BookImage.find_all_by_book_id(@book.id)
 
     #レビュー投稿用にセッションにbook_idを保持
     session[:book_id] = @book.id
@@ -52,6 +54,7 @@ class BooksController < ApplicationController
   # POST /books.json
   def create
     @book = Book.new(params[:book])
+    @book_image = @book.book_images.build()
 
     #アップロード処理
     self.upload_pics
@@ -65,6 +68,9 @@ class BooksController < ApplicationController
         format.json { render json: @book.errors, status: :unprocessable_entity }
       end
     end
+
+
+
   end
 
   # PUT /books/1
@@ -96,7 +102,7 @@ class BooksController < ApplicationController
       format.html { redirect_to books_url }
       format.json { head :ok }
     end 
- end
+  end
 
   def list
     @books = Book.all
@@ -108,27 +114,38 @@ class BooksController < ApplicationController
   end
 
   def upload_pics
-    #アップロード処理
-    if params[:book][:img_url]
-      #file = @book.img_url
-      file = params[:book][:img_url]
-      name = file.original_filename
-      #新規登録用
-      @book.img_url = "#{name}"
-      #更新用
-      params[:book][:img_url] = "#{name}"
+    begin
+      #アップロード処理
+      if params[:book_image][:image_name]
+        #file = @book.img_url
+        file = params[:book_image][:image_name]
+        name = file.original_filename
+        #新規登録用
+        #@book.img_url = "#{name}"
+        @book_image.image_name = "#{name}"
+        #更新用
+        params[:book_image][:image_name] = "#{name}"
 
-      perms = ['.jpg','.jpeg','.gif','.png','.bmp']
-      if !perms.include?(File.extname(name).downcase)
-        result = 'アップロードできるのは画像ファイルのみです。'
 
-      elsif file.size > 1.megabyte
-        result = 'ファイルサイズは1MBまでです。'
-      else
-        name = name.kconv(Kconv::SJIS, Kconv::UTF8)
-        File.open("app/assets/images/#{name}", 'wb'){|f| f.write(file.read)}
-        #result = "#{name.toutf8}をアップロードしました。"
+        ActiveRecord::Base::transaction do
+          perms = ['.jpg','.jpeg','.gif','.png','.bmp']
+          
+          if !perms.include?(File.extname(name).downcase)
+            result = 'アップロードできるのは画像ファイルのみです。'
+
+          elsif file.size > 1.megabyte
+            result = 'ファイルサイズは1MBまでです。'
+          else
+            name = name.kconv(Kconv::SJIS, Kconv::UTF8)
+            File.open("app/assets/images/#{name}", 'wb'){|f| f.write(file.read)}
+            #result = "#{name.toutf8}をアップロードしました。"
+          end
+        end
+
       end
+    rescue
+      return "failed"
     end
   end
+
 end

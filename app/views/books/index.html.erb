@@ -20,11 +20,18 @@
     <td><%= book.publish %></td>
     <td><%= book.publisher %></td>
     <td><%= book.cd %></td>
-    <% if book.img_url %>
-      <td><%= image_tag book.img_url %> </td>
-    <% elsif %>
-      <td><%= image_tag "no-image.jpg"%></td>
-    <% end %>
+
+    <td>
+      <% if book.book_images[0] %>
+        <%if book.book_images[0].image_name != nil%>
+          <%= image_tag book.book_images[0].image_name %>
+        <% elsif %>
+          <%= image_tag "no-image.jpg"%>
+        <% end  %>
+      <% elsif %>
+        <%= image_tag "no-image.jpg"%>
+      <% end %>
+    </td>
     <td><%= link_to 'Show', book %><br/>
         <%= link_to 'Edit', edit_book_path(book) %><br/>
         <%= link_to 'Destroy', book, confirm: 'Are you sure?', method: :delete %></td>

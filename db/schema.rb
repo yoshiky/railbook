@@ -11,7 +11,16 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120327073914) do
+ActiveRecord::Schema.define(:version => 20120423034848) do
+
+  create_table "book_images", :force => true do |t|
+    t.integer  "book_id"
+    t.string   "image_name"
+    t.integer  "display_order"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.datetime "deleted_at"
+  end
 
   create_table "books", :force => true do |t|
     t.string   "isbn"

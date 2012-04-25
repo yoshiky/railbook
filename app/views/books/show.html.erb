@@ -31,8 +31,8 @@
 </p>
 
 <p>
-  <b>Image</b>
-  <%= image_tag @book.img_url %>
+  <b>Image:</b>
+  <%= render @book_image %>
 </p>
 
 
@@ -42,13 +42,13 @@
 
 <br/>
 <br/>
-<br/>
+<hr/>
 <div>この本のレビュー一覧</div>
 
 <div>
-  <%  if @review.empty? %>
+  <% if @review.empty? %>
     <div> まだレビューはありません。</div>
-  <%  else %>
+  <% else %>
     <table border="1">
       <tr>
         <td>投稿者</td>
@@ -58,5 +58,5 @@
       <%= render @review %>
     </table>
 
-  <%  end %>
+  <% end %>
 </div>

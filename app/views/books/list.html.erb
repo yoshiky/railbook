@@ -12,8 +12,8 @@
       <td><%= book.publish %></td>
       <td><%= book.published %></td>
       <td><%= book.cd %></td>
-      <% if book.img_url == nil%>
-        <td><%= image_tag (book.img_url)%> </td>
+      <% if book_images.image_name == nil%>
+        <td><%= image_tag (book_images.image_name)%> </td>
       <% else %>
         <td><%= image_tag ("no-image.jpg")%></td>
       <% end %>
