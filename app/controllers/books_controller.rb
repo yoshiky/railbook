@@ -48,6 +48,8 @@ class BooksController < ApplicationController
   # GET /books/1/edit
   def edit
     @book = Book.find(params[:id])
+    #@book_image = BookImage.find_all_by_book_id(@book.id)
+    @book_image = @book.book_images
   end
 
   # POST /books
@@ -69,27 +71,36 @@ class BooksController < ApplicationController
       end
     end
 
-
-
   end
 
   # PUT /books/1
   # PUT /books/1.json
   def update
     @book = Book.find(params[:id])
+    @book_image = @book.book_images
 
     #アップロード処理
-    self.upload_pics
+    ret = self.upload_pics
 
-    respond_to do |format|
-      if @book.update_attributes(params[:book])
-        format.html { redirect_to @book, notice: 'Book was successfully updated.' }
-        format.json { head :ok }
-      else
-        format.html { render action: "edit" }
-        format.json { render json: @book.errors, status: :unprocessable_entity }
+    ActiveRecord::Base.transaction do
+      @book_image = @book
+      @book.update_attributes(params[:book])
+      if ret == 1
+        @book_image.save!
       end
+      flash[:notice] = '変更を保存しました。'
+      redirect_to :action => 'show', :id => @book
     end
+
+#    respond_to do |format|
+#      if @book.update_attributes(params[:book])
+#        format.html { redirect_to @book, notice: 'Book was successfully updated.' }
+#        format.json { head :ok }
+#      else
+#        format.html { render action: "edit" }
+#        format.json { render json: @book.errors, status: :unprocessable_entity }
+#      end
+#    end
   end
 
   # DELETE /books/1
@@ -114,38 +125,35 @@ class BooksController < ApplicationController
   end
 
   def upload_pics
-    begin
-      #アップロード処理
-      if params[:book_image][:image_name]
-        #file = @book.img_url
-        file = params[:book_image][:image_name]
-        name = file.original_filename
-        #新規登録用
-        #@book.img_url = "#{name}"
-        @book_image.image_name = "#{name}"
-        #更新用
-        params[:book_image][:image_name] = "#{name}"
 
+    #アップロード処理
+    if params[:book_image].blank?
+      return 0
+    else
+      #file = @book.img_url
+      file = params[:book_image][:image_name]
+      name = file.original_filename
+      #新規登録用
+      #@book.img_url = "#{name}"
+      @book_image.image_name = "#{name}"
+      #更新用
+      params[:book_image][:image_name] = "#{name}"
 
-        ActiveRecord::Base::transaction do
-          perms = ['.jpg','.jpeg','.gif','.png','.bmp']
-          
-          if !perms.include?(File.extname(name).downcase)
-            result = 'アップロードできるのは画像ファイルのみです。'
+      perms = ['.jpg','.jpeg','.gif','.png','.bmp']
 
-          elsif file.size > 1.megabyte
-            result = 'ファイルサイズは1MBまでです。'
-          else
-            name = name.kconv(Kconv::SJIS, Kconv::UTF8)
-            File.open("app/assets/images/#{name}", 'wb'){|f| f.write(file.read)}
-            #result = "#{name.toutf8}をアップロードしました。"
-          end
-        end
+      if !perms.include?(File.extname(name).downcase)
+        result = 'アップロードできるのは画像ファイルのみです。'
 
+      elsif file.size > 1.megabyte
+        result = 'ファイルサイズは1MBまでです。'
+      else
+        name = name.kconv(Kconv::SJIS, Kconv::UTF8)
+        File.open("assets/images/#{name}", 'wb'){|f| f.write(file.read)}
+        #result = "#{name.toutf8}をアップロードしました。"
       end
-    rescue
-      return "failed"
+      return 1
     end
+      
   end
 
 end

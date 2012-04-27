@@ -1,5 +1,9 @@
 <p id="notice"><%= notice %></p>
 
+
+<p>
+  <%= render @book_image %>
+</p>
 <p>
   <b>Isbn:</b>
   <%= @book.isbn %>
@@ -29,12 +33,6 @@
   <b>Cd:</b>
   <%= @book.cd %>
 </p>
-
-<p>
-  <b>Image:</b>
-  <%= render @book_image %>
-</p>
-
 
 <%= link_to 'Edit', edit_book_path(@book) %> |
 <%= link_to 'Back', books_path %> |

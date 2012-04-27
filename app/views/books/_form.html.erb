@@ -11,6 +11,14 @@
     </div>
   <% end %>
 
+  <% if @book_image %>
+    <table>
+      <tr>
+        <%= render @book_image %>
+      </tr>
+    </table>
+  <% end %>
+
   <div class="field">
     <%= f.label :isbn %><br />
     <%= f.text_field :isbn %>
