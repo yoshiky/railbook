@@ -11,6 +11,7 @@ Railbook::Application.routes.draw do
     put :finish, :on => :member
     put :unfinish, :on => :member
     get :done, :on => :collection
+    get :image, :action=>'image'
   end
 
   #resources :users
@@ -71,5 +72,6 @@ Railbook::Application.routes.draw do
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
+  #match '/books/:id',:action=>'image', :controller=>'books'
   match ':controller(/:action(/:id(.:format)))'
 end

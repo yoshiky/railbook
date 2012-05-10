@@ -156,4 +156,15 @@ class BooksController < ApplicationController
       
   end
 
+  def image
+    if params[:file].blank?
+      render :nothing => true, :status => 404
+      return
+    end
+
+    path = File.join(SYSTEM_CONFIG[:image_dir],
+      params[:file])
+    send_file path, :disposition => 'inline'
+  end
+
 end
