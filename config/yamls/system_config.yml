@@ -1,0 +1,10 @@
+## YAML Template.
+---
+common: &common
+  # MAIL
+
+development:
+  <<: *common
+
+  # book images directory
+  :img_dir: "/home/nagatsuka/railbook_images/%i/"

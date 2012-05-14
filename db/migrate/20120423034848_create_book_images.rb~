@@ -1,0 +1,12 @@
+class CreateBookImages < ActiveRecord::Migration
+  def change
+    create_table :book_images do |t|
+      t.integer :book_id
+      t.string :imane_name
+      t.string :display_order
+
+      t.timestamps
+      t.datetime :deleted_at
+    end
+  end
+end

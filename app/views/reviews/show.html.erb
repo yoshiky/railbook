@@ -1,0 +1,32 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Book:</b><br/>
+  <%= @review.book_id %> : 
+  <%= @review.book.title %>
+</p>
+
+<p>
+  <b>User:</b><br/>
+  <%= @review.user_id %>：
+  <%= @review.user.email %>
+</p>
+
+<p>
+  <b>Nickname:</b>
+  <%= @review.nickname %>
+</p>
+
+<p>
+  <b>Title:</b>
+  <%= @review.title %>
+</p>
+
+<p>
+  <b>Body:</b>
+  <%= @review.body %>
+</p>
+
+
+<%#= link_to 'Edit', edit_review_path(@review) %>
+<%= link_to '書籍一覧に戻る', books_path %>
