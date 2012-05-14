@@ -77,16 +77,15 @@ class BooksController < ApplicationController
   # PUT /books/1.json
   def update
     @book = Book.find(params[:id])
-    @book_image = @book.book_images
+    @book_image = BookImage.new(params[:book_image])
 
     #アップロード処理
     ret = self.upload_pics
 
     ActiveRecord::Base.transaction do
-      @book_image = @book
       @book.update_attributes(params[:book])
       if ret == 1
-        @book_image.save!
+        @book.book_images << @book_image
       end
       flash[:notice] = '変更を保存しました。'
       redirect_to :action => 'show', :id => @book
@@ -130,11 +129,9 @@ class BooksController < ApplicationController
     if params[:book_image].blank?
       return 0
     else
-      #file = @book.img_url
       file = params[:book_image][:image_name]
       name = file.original_filename
       #新規登録用
-      #@book.img_url = "#{name}"
       @book_image.image_name = "#{name}"
       #更新用
       params[:book_image][:image_name] = "#{name}"
@@ -148,7 +145,7 @@ class BooksController < ApplicationController
         result = 'ファイルサイズは1MBまでです。'
       else
         name = name.kconv(Kconv::SJIS, Kconv::UTF8)
-        File.open("assets/images/#{name}", 'wb'){|f| f.write(file.read)}
+        File.open("/home/nagatsuka/railbook_contents/#{name}", 'wb'){|f| f.write(file.read)}
         #result = "#{name.toutf8}をアップロードしました。"
       end
       return 1
