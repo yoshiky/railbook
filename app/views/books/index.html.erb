@@ -1,46 +1,39 @@
-<h1>Listing books</h1>
+<%#*<h1>Listing books</h1>%>
 <%= book_image_tag %>
 <hr/>
 
-<table border="1">
-  <tr bgcolor="#c0ffc0">
-    <th>Isbn</th>
-    <th>Title</th>
-    <th>Price</th>
-    <th>Publish</th>
-    <th>Publisher</th>
-    <th>Cd</th>
-    <th>Image</th>
-    <th></th>
-  </tr>
+<div class="main">
+  <table border="0">
+    <% @books.each do |book| %>
+      <tr style="background-color:<%= cycle('#FFffFF','#FFff99') %> ">
+        <td>
+          <% if book.book_images[0] %>
+            <%if book.book_images[0].image_name != nil%>
+              <%= image_tag book.book_images[0].image_name, :width => "120" %>
+            <% elsif %>
+              <%= image_tag "no-image.jpg", :width => "120"%>
+            <% end  %>
+          <% elsif %>
+            <%= image_tag "no-image.jpg", :width => "120"%>
+          <% end %>
+        </td>
 
-<% @books.each do |book| %>
-  <tr style="background-color:<%= cycle('#FFffFF','#FFff99') %> ">
-    <td><%= book.isbn %></td>
-    <td><%= book.title %></td>
-    <td><%= number_to_currency(book.price, :unit => '￥', :precision => 0) %></td>
-    <td><%= book.publish %></td>
-    <td><%= book.publisher %></td>
-    <td><%= book.cd %></td>
+        <td>
+          <h2><%= book.title %></h2>
+          <%= book.publish %><br/>
+          <%= number_to_currency(book.price, :unit => '￥', :precision => 0) %>&nbsp;&nbsp;
+          発行：<%= book.publisher %>&nbsp;&nbsp;
+          ISBN :<%= book.isbn %><br/>
+          CD：<%= book.cd %>
+        </td>
 
-    <td>
-      <% if book.book_images[0] %>
-        <%if book.book_images[0].image_name != nil%>
-          <%= image_tag book.book_images[0].image_name %>
-        <% elsif %>
-          <%= image_tag "no-image.jpg"%>
-        <% end  %>
-      <% elsif %>
-        <%= image_tag "no-image.jpg" %>
-      <% end %>
-    </td>
-    <td><%= link_to 'Show', book %><br/>
-        <%= link_to 'Edit', edit_book_path(book) %><br/>
-        <%= link_to 'Destroy', book, confirm: 'Are you sure?', method: :delete %></td>
-  </tr>
-<% end %>
-</table>
-
+        <td><%= link_to 'Show', book %><br/>
+          <%= link_to 'Edit', edit_book_path(book) %><br/>
+          <%= link_to 'Destroy', book, confirm: 'Are you sure?', method: :delete %></td>
+      </tr>
+    <% end %>
+  </table>
+</div>
 <br />
 
 <%= link_to 'New Book', new_book_path %>
