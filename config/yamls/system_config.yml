@@ -7,4 +7,4 @@ development:
   <<: *common
 
   # book images directory
-  :img_dir: "/home/nagatsuka/railbook_images/%i/"
+  :image_dir: "/home/nagatsuka/railbook_images/"

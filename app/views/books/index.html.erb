@@ -1,5 +1,5 @@
 <%#*<h1>Listing books</h1>%>
-<%= book_image_tag %>
+<%= image_tag "title_image.JPG" %>
 <hr/>
 
 <div class="main">
@@ -9,7 +9,8 @@
         <td>
           <% if book.book_images[0] %>
             <%if book.book_images[0].image_name != nil%>
-              <%= image_tag book.book_images[0].image_name, :width => "120" %>
+              <%#= image_tag book.book_images[0].image_name, :width => "120" %>
+          <%= book_image_tag(book.id,book.book_images[0].id,book.book_images[0].image_name,120) %>
             <% elsif %>
               <%= image_tag "no-image.jpg", :width => "120"%>
             <% end  %>

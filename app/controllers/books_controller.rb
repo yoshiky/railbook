@@ -10,7 +10,8 @@ class BooksController < ApplicationController
   def index
     #@books = Book.all
     @books = Book.find(:all, :order => "isbn")
-    @book_images = []
+    @book_images = BookImage.find(:all, :include => :book)
+    #@book_images = []
 
     respond_to do |format|
       format.html # index.html.erb
@@ -159,10 +160,11 @@ class BooksController < ApplicationController
       return
     end
 
-#    path = File.join(SYSTEM_CONFIG[:img_dir],
-#      params[:file])
-#    send_file path, :disposition => 'inline'
-    send_file '/home/nagatsuka/railbook_images/title_image.JPG',:type => 'image/jpeg', :disposition => 'inline'
+    path = File.join(SYSTEM_CONFIG[:image_dir],
+      params[:id],
+      params[:book_id],
+      params[:file])
+    send_file path,:type => 'image/jpeg', :disposition => 'inline'
   end
 
 end

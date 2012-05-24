@@ -11,8 +11,10 @@ Railbook::Application.routes.draw do
     put :finish, :on => :member
     put :unfinish, :on => :member
     get :done, :on => :collection
-    get :image, :action=>'image'
+    #get :image, :action=>'image'
   end
+
+  match 'books/:id/:book_id/:file' => 'books#image',:constraints => { :file => /.*/ }, :as => :book_image
 
   #resources :users
   #resources :books
